@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: gallery
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn gallery.wsgi:application
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: gallery.settings
+      - key: SECRET_KEY
+        value: django-insecure-46q_46a3%f4x$s)$vjh(te@=q(xdp$q0jq2k&k)5(pr_4id5-(
+      - key: DEBUG
+        value: "True"

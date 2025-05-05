@@ -1,0 +1,12 @@
+Django>=5.2
+gunicorn
+psycopg2-binary
+
+asgiref==3.8.1
+setuptools==80.3.0
+sqlparse==0.5.3
+tzdata==2025.2
+wheel==0.38.4
+
+dj-database-url
+requests

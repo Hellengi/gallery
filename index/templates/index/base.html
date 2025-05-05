@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+{% load static %}
+<style>
+    body {
+        background-image: url("{% static 'accounts/sky.jpg' %}");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+</style>
+<body>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+<header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 border-bottom bg-light bg-opacity-5">
+  <div class="col-md-3 mb-2 mb-md-0">
+    <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
+      <svg class="bi" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
+    </a>
+  </div>
+
+  <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+    <li><a href="{% url 'home' %}" class="nav-link px-2">Домашняя страница</a></li>
+    <li><a href="{% url 'profile' %}#" class="nav-link px-2">Личный кабинет</a></li>
+    <li><a href="{% url 'google-login' %}" class="nav-link px-2">Войти в Гугл</a></li>
+    <li><a href="{% url 'google-callback' %}" class="nav-link px-2">Еще че-то про Гугл</a></li>
+    <li><a href="{% url 'photo' %}" class="nav-link px-2">Фотографии</a></li>
+  </ul>
+
+  <div class="col-md-3 text-end">
+    {% if request.session.user_name %}
+        <button type="button" class="btn btn-outline-primary me-2">
+            <a href="{% url 'logout' %}">Выйти</a>
+        </button>
+    {% else %}
+        <button type="button" class="btn btn-outline-primary me-2">
+            <a href="{% url 'login' %}">Войти</a>
+        </button>
+        <button type="button" class="btn btn-outline-primary me-2">
+            <a href="{% url 'signup' %}">Зарегистрироваться</a>
+        </button>
+    {% endif %}
+  </div>
+</header>
+{% block head %}{% endblock %}
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+</body>
+</html>

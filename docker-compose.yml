@@ -1,0 +1,12 @@
+version: '3.9'
+
+services:
+  web:
+    build: .
+    command: gunicorn gallery.wsgi:application --bind 0.0.0.0:8001
+    ports:
+      - "8001:8001"
+    volumes:
+      - .:/app
+    env_file:
+      - .env
