@@ -7,26 +7,10 @@
 
 {% block head %}
 <div class="p-3 pb-1 mb-4 bg-body-tertiary border bg-opacity-75 text-center">
-    <h1>Самые богатые люди планеты</h1><br>
+    <h1>Hello World!</h1><br>
 </div>
 {% endblock %}
 
 {% block content %}
-    <style>
-        body {
-            background-image: url("{% static 'accounts/earth.jpg' %}");
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center center;
-        }
-    </style>
-    {% if users %}
-        {% for el in users %}
-            <div class="p-3 pb-1 mb-4 bg-body-tertiary rounded-3 border bg-opacity-50">
-                <h3>{{ el.name }}</h3>
-            </div>
-        {% endfor %}
-    {% else %}
-        <p>Нет пользователей</p>
-    {% endif %}
+
 {% endblock %}

@@ -1,16 +1,18 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Моя фотогалерея</title>
-</head>
-<body>
-    <h1>Фотографии из Google Photos</h1>
-    <ul>
-        {% for item in media_items %}
-            <li>
-                <img src="{{ item.baseUrl }}=w200-h200" alt="Photo">
-            </li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends 'index/base.html' %}
+
+{% block title %}
+Галерея
+{% endblock %}
+
+{% block content %}
+    <div class="p-5 mb-4 bg-body-tertiary rounded-3 border mt-4">
+        <h1>Фотографии из Google Photos</h1>
+        <ul>
+            {% for item in media_items %}
+                <li>
+                    <img src="{{ item.baseUrl }}=w200-h200" alt="Photo">
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

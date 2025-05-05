@@ -1,7 +1,4 @@
-from django.shortcuts import render, redirect
-from .models import User
-from .forms import UserForm, LoginForm
-from decimal import Decimal
+from urllib.parse import urlencode
 
 import requests
 from django.conf import settings
@@ -12,73 +9,19 @@ from django.contrib.auth.models import User
 
 
 def index(request):
-    users = User.objects.order_by('id')
-    return render(request, "accounts/index.html", {'title': 'Приветствие', 'users': users})
-
-
-def profile(request):
-    name = request.session.get('user_name')
-    user = User.objects.filter(name=name).first()
-    return render(request, "accounts/profile.html", {'user': user})
-
-
-def signup(request):
-    error = ''
-    if request.method == 'POST':
-        form = UserForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            request.session['user_name'] = user.name
-            return redirect('profile')
-        else:
-            error = 'Неверные данные'
-
-    form = UserForm()
-    context = {
-        'form': form,
-        'error': error
-    }
-    return render(request, "accounts/signup.html", context)
-
-"""
-def login(request):
-    error = ''
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        password = request.POST.get('password')
-        user = User.objects.filter(name=name, password=password).first()
-
-        if user:
-            request.session['user_name'] = user.name
-            return redirect('profile')
-        else:
-            error = 'Неверное имя или пароль'
-
-    form = LoginForm()
-    context = {
-        'form': form,
-        'error': error
-    }
-
-    return render(request, 'accounts/login.html', context)
-"""
-
-
-def logout(request):
-    request.session['user_name'] = None
-    return redirect('home')
+    return render(request, "accounts/index.html")
 
 
 def google_login(request):
-    client_id = settings.GOOGLE_CLIENT_ID
-    redirect_uri = settings.GOOGLE_REDIRECT_URI
-    scope = "openid email profile https://www.googleapis.com/auth/photoslibrary.readonly"
-    auth_url = (
-        "https://accounts.google.com/o/oauth2/v2/auth"
-        f"?response_type=code&client_id={client_id}"
-        f"&redirect_uri={redirect_uri}&scope={scope}"
-        "&access_type=offline&prompt=consent"
-    )
+    params = {
+        "response_type": "code",
+        "client_id": settings.GOOGLE_CLIENT_ID,
+        "redirect_uri": settings.GOOGLE_REDIRECT_URI,
+        "scope": "openid email profile https://www.googleapis.com/auth/photoslibrary.readonly",
+        "access_type": "offline",
+        "prompt": "consent"
+    }
+    auth_url = "https://accounts.google.com/o/oauth2/v2/auth?" + urlencode(params)
     return redirect(auth_url)
 
 
@@ -116,6 +59,8 @@ def google_callback(request):
     request.session['access_token'] = access_token
     request.session['refresh_token'] = refresh_token
 
+    print("ACCESS TOKEN:", access_token)
+
     return redirect('photo')
 
 
@@ -130,5 +75,12 @@ def photo(request):
     resp = requests.get(url, headers=headers)
     data = resp.json()
     media_items = data.get('mediaItems', [])
+    print(resp)
+    print(data)
+    print(media_items)
+    url = 'https://photoslibrary.googleapis.com/v1/albums'
+    resp = requests.get(url, headers={'Authorization': f'Bearer {access_token}'})
+    print(resp.status_code)
+    print(resp.json())
 
-    return render(request, 'gallery.html', {'media_items': media_items})
+    return render(request, 'accounts/gallery.html', {'media_items': media_items})
